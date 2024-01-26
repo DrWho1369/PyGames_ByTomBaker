@@ -42,5 +42,3 @@ Welcome to Logan's Meteor Game, a simple yet thrilling space shooter style game 
 Feel free to explore, contribute, and share your high scores! Have fun playing Logan's Meteor Game!
 
 ---
-
-**Disclaimer:** This game is for entertainment purposes, and users are responsible for adhering to all relevant legal and ethical guidelines while playing.
