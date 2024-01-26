@@ -9,10 +9,14 @@ def laser_update(laser_list, speed = 300):
 
 def display_score():
     score_text = f"Score: {pygame.time.get_ticks() // 1000}"
-    text_surf = font.render(f"{score_text} || Logan's SPACE Game", True, 'White')
-    text_rect = text_surf.get_rect(midbottom = (WINDOW_WIDTH/2, WINDOW_HEIGHT-80))
+    text_surf = font.render("Logan's Meteor Game", True, 'White')
+    text_surf2 = font.render(f"{score_text}", True, 'White')
+    text_rect = text_surf.get_rect(midbottom = (WINDOW_WIDTH/2, WINDOW_HEIGHT-50))
+    text_rect2 = text_surf2.get_rect(midleft = (100, 100))
     display_surface.blit(text_surf, (text_rect))
+    display_surface.blit(text_surf2, (text_rect2))
     pygame.draw.rect(display_surface,(255,255,255),text_rect.inflate(30,30), width=8, border_radius=5,)
+    pygame.draw.rect(display_surface,(255,255,255),text_rect2.inflate(30,30), width=8, border_radius=5,)
 
 def laser_timer(can_shoot, duration = 500):
     if not can_shoot:
@@ -34,7 +38,7 @@ def met_update(met_list, speed = 400):
 pygame.init()
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280,720
 display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption("LOGAN'S METEOR SHOOTER")
+pygame.display.set_caption("LOGAN'S METEOR")
 clock = pygame.time.Clock()
 
 # Ship Import
@@ -63,8 +67,11 @@ pygame.time.set_timer(meteor_timer, 500)
 met_surf = pygame.image.load('./graphics/meteor.png').convert_alpha()
 met_list = []
 
-
-
+# Import Sound
+laser_sound = pygame.mixer.Sound('./sound/laser.ogg')
+exp_sound = pygame.mixer.Sound('./sound/explosion.wav')
+bg_music = pygame.mixer.Sound('./sound/music.wav')
+bg_music.play(loops = -1)
 while True: 
     # Event Loop
     for event in pygame.event.get():
@@ -82,6 +89,9 @@ while True:
             # Timer Logic
             can_shoot = False
             shoot_time = pygame.time.get_ticks()
+
+            # Play Laser Sound
+            laser_sound.play()
 
         if event.type == meteor_timer:
 
@@ -113,6 +123,7 @@ while True:
         if ship_rect.colliderect(met_rect):
             pygame.quit()
             sys.exit()
+            
     
     # Laser-Meteor Collisions
     
@@ -121,6 +132,7 @@ while True:
             if laser_rect.colliderect(meteor_tuple[0]):
                 laser_list.remove(rect)
                 met_list.remove(meteor_tuple)
+                exp_sound.play()
     # Drawing
     display_surface.fill((0,0,0))
     display_surface.blit(bg_surf,(0,0))
